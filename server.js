@@ -42,8 +42,7 @@ app.post("/send-email", async (req, res) => {
 app.get("/", async (req, res) => {
   try {
     res.json({
-      message: "Auraplanner is live",
-      messageId: info.messageId,
+      message: "Auraplanner is live"
     });
   } catch (err) {
     console.error("Something went wrong", err);
