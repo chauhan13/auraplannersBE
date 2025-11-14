@@ -38,6 +38,20 @@ app.post("/send-email", async (req, res) => {
   }
 });
 
+
+app.get("/", async (req, res) => {
+  try {
+    res.json({
+      message: "Auraplanner is live",
+      messageId: info.messageId,
+    });
+  } catch (err) {
+    console.error("Something went wrong", err);
+    res.status(500).json({ error: "Something went wrong please check" });
+  }
+});
+
+
 // Start Server
 app.listen(process.env.PORT, () => {
   console.log("SMTP Mail API running on port 4000");
