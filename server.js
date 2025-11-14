@@ -1,9 +1,16 @@
 require("dotenv").config();
 const express = require("express");
 const nodemailer = require("nodemailer");
-
+const cors = require("cors");
 const app = express();
 app.use(express.json());
+
+
+app.use(cors({
+  origin: ["http://localhost:3000", "https://auraplanners.in"],
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type"],
+}));
 
 // SMTP Transporter (Gmail)
 const transporter = nodemailer.createTransport({
@@ -27,7 +34,6 @@ app.post("/send-email", async (req, res) => {
       subject,
       html: `<p>${message}</p><br><p>Customer Mail = ${from}`,
     });
-
     res.json({
       message: "Email sent successfully",
       messageId: info.messageId,
