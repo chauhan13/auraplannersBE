@@ -7,7 +7,7 @@ app.use(express.json());
 
 
 app.use(cors({
-  origin: ["http://localhost:3000", "https://www.auraplanners.in"],
+  origin: ["http://localhost:3000", "https://www.auraplanners.in","https://auraplanners.in"],
   methods: ["GET", "POST"],
   allowedHeaders: ["Content-Type"],
 }));
@@ -26,13 +26,18 @@ const transporter = nodemailer.createTransport({
 // Send Email API
 app.post("/send-email", async (req, res) => {
   try {
-    const { from,name, subject, message } = req.body;
-
+    const { email, name, phone , message } = req.body;
     const info = await transporter.sendMail({
-      from: `Enquiry Mail Customer  :${name} `,
-      to:`${process.env.SMTP_USER}`,
-      subject,
-      html: `<p>${message}</p><br><p>Customer Mail = ${from}`,
+      subject: `Enquiry Mail AuraPlanners from: ${name}`,
+      to: process.env.SMTP_USER,
+      html: `
+        <pre>
+Name: ${name}
+From: ${email}
+Phone: ${phone}
+Message: ${message}
+        </pre>
+      `,
     });
     res.json({
       message: "Email sent successfully",
