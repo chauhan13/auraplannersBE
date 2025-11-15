@@ -7,7 +7,7 @@ app.use(express.json());
 
 
 app.use(cors({
-  origin: ["http://localhost:3000", "https://auraplanners.in"],
+  origin: ["http://localhost:3000", "https://www.auraplanners.in"],
   methods: ["GET", "POST"],
   allowedHeaders: ["Content-Type"],
 }));
