@@ -1,19 +1,28 @@
 require("dotenv").config();
 const express = require("express");
-const nodemailer = require("nodemailer");
+const pool = require("../src/configuration/connection");
+const auth = require("./middleware/middlewareAuth");
+const authRoutes = require("./routes/auth");
+const fileRoutes = require("./routes/files");
 const cors = require("cors");
+const nodemailer = require("nodemailer");
 const app = express();
+app.use(cors());
+
 app.use(express.json());
 
+app.use(express.json());
+(async () => {
+    try {
+      const result = await pool.query('SELECT 1');
+      console.log("Connected to MySQL database successfully!");
+    } catch (err) {
+      console.error("Error connecting to MySQL database:", err);
+      process.exit(1);
+    }
+  })();
 
-app.use(cors({
-  origin: ["http://localhost:3000", "https://www.auraplanners.in","https://auraplanners.in"],
-  methods: ["GET", "POST"],
-  allowedHeaders: ["Content-Type"],
-}));
-
-// SMTP Transporter (Gmail)
-const transporter = nodemailer.createTransport({
+  const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: process.env.SMTP_PORT,
   secure: false, // Gmail uses TLS
@@ -23,7 +32,11 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Send Email API
+
+// Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/content", fileRoutes);
+
 app.post("/send-email", async (req, res) => {
   try {
     const { email, name, phone , message } = req.body;
@@ -62,7 +75,7 @@ app.get("/", async (req, res) => {
 });
 
 
-// Start Server
-app.listen(process.env.PORT, () => {
-  console.log("SMTP Mail API running on port 4000");
-});
+
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
