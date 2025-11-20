@@ -7,8 +7,9 @@ const fileRoutes = require("./routes/files");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
 const app = express();
+
 app.use(cors({
-  origin: ["http://localhost:3000", "https://www.auraplanners.in"],
+  origin: ["http://localhost:3000", "https://www.auraplanners.in","https://auraplanners.in'"],
   methods: ["GET", "POST"],
   allowedHeaders: ["Content-Type"],
 }));
